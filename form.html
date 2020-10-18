@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: #202020;
+    }
+</style>
+<body>
+    <h2>Formulário</h2>
+
+    <form action="http://localhost:3333/employees" method="POST">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" placeholder="Digite seu nome" required><br>
+        
+        <label for="office">Office</label><br>
+        <input type="text" id="office" name="office" placeholder="Digite seu cargo" required><br><br>
+        
+        <input type="reset" value="Limpar">
+        <input type="submit" value="Cadastrar">
+    </form> 
+    <br>
+    <button type="button">
+        <a href="http://localhost:3333/employees">
+            Obter todos os cadastrados
+        </a>
+    </button>
+</body>
+</html>
+
+
