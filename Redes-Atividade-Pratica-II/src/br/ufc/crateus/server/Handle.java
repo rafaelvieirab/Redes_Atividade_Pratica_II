@@ -31,50 +31,53 @@ public class Handle implements  Runnable {
 		HttpRequest request = new HttpRequest(socket.getInputStream());
 		
 		HttpResponse response = new HttpResponse();
+		
 		response.addHeader("Date", new Date(System.currentTimeMillis()).toString());
 		response.addHeader("Connection", "Close");
 		response.addHeader("Content-Type", "text/html; charset=utf-8");
 		
-		if(!request.getVersion().equals("1.1")) {
-			response.setStatusCode(505);
-			response.setStatusText("HTTP Version Not Supported");
-			response.addHeader("Content-Length", "0");
+		validation(request, response);
+		
+		if(response.getBodyLength() == 0) {
+			String responseHtml = BuildHtmlResponse.toHtml(
+					String.valueOf(response.getStatusCode()),
+					response.getStatusText());
+			response.setBody(responseHtml);
 		}
-		else if(!request.getTarget().equals("/employees")) {
-			response.setStatusCode(404);
-			response.setStatusText("Not Found");
-			response.addHeader("Content-Length", "0");
-		}
-		else if(request.getMethod() == HttpMethod.GET) {
-			response.setStatusCode(200);
-			response.setStatusText("OK");
-			response.setBody(BuildHtmlResponse.toHtml(EmployeeDAO.getAllEmployees()));
-			response.addHeader("Content-Length", String.valueOf(response.getBodyLength()));
-		}
-		else if(request.getMethod() == HttpMethod.POST) {
-			if(request.getBodyLength() > 0) {
-				Employee emp = StringToEmployee(request.getBody());
-				response.setStatusCode(201);
-				response.setStatusText("Created");
-				response.setBody(BuildHtmlResponse.toHtml(emp));
-				response.addHeader("Content-Length", String.valueOf(response.getBodyLength()));
-			}
-			else {
-				response.setStatusCode(400);
-				response.setStatusText("Bad Request");
-				response.addHeader("Content-Length", "0");
-			}
-		}
-		else {
-			response.setStatusCode(404);
-			response.setStatusText("Not Found");
-			response.addHeader("Content-Length", "0");
-		}
+		response.addHeader("Content-Length", String.valueOf(response.getBodyLength()));
 		
 		OutputStream outputStream = socket.getOutputStream();
 		outputStream.write(response.toString().getBytes());
 		outputStream.flush();
 		socket.close();
+	}
+	
+	private void validation(HttpRequest request, HttpResponse response) {
+		
+		if(request.getTarget().equals("/employees") && 
+				request.getMethod() == HttpMethod.GET) {
+			response.setStatusCode(200);
+			response.setStatusText("OK");
+			response.setBody(BuildHtmlResponse.toHtml(EmployeeDAO.getAllEmployees()));
+		}
+		else if(request.getTarget().equals("/employees") &&
+				request.getMethod() == HttpMethod.POST) {
+			
+			if(request.getBodyLength() > 0) {
+				Employee emp = StringToEmployee(request.getBody());
+				response.setStatusCode(201);
+				response.setStatusText("Created");
+				response.setBody(BuildHtmlResponse.toHtml(emp));
+			}
+			else {
+				response.setStatusCode(400);
+				response.setStatusText("Bad Request");
+			}
+		}
+		else {
+			response.setStatusCode(404);
+			response.setStatusText("Not Found");
+		}
 	}
 	
 	public void run() {

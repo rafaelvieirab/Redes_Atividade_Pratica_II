@@ -11,6 +11,7 @@ public class HttpResponse {
 	
 	public HttpResponse() {
 		this.version = "HTTP/1.0";
+		this.body = "";
 		this.headers = new ArrayList<Header>();
 	}
 
@@ -22,8 +23,16 @@ public class HttpResponse {
 		return body.length();
 	}
 
+	public int getStatusCode() {
+		return statusCode;
+	}
+
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
+	}
+
+	public String getStatusText() {
+		return statusText;
 	}
 
 	public void setStatusText(String statusText) {

@@ -28,10 +28,6 @@ public class EmployeeDAO {
 		nextId = 3;
 	}
 
-	public static Employee getEmployee(int id) {
-		return employeeMap.get(id);
-	}
-
 	public static Employee addEmployee(String name, String office) {
 		Employee emp = new Employee(nextId, name, office);
 		employeeMap.put(emp.getId(), emp);

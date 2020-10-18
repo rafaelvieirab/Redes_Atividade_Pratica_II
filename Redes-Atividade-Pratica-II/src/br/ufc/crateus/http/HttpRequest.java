@@ -63,7 +63,7 @@ public class HttpRequest {
     	String[] values = line.split(" ");
     	this.method = returnMethod(values[0]);
     	this.target = values[1];
-    	this.version = values[2].split("/")[1]; //Pega só o valor da versão, ignora o "HTTP"
+    	this.version = values[2];
     }
     
     private void readHeader(BufferedReader br) throws IOException {
@@ -111,7 +111,7 @@ public class HttpRequest {
     	StringBuilder msg = new StringBuilder();
     	String endLine = "\r\n";
     	
-    	msg.append(method + " " + target + " HTTP/" + version + endLine);
+    	msg.append(method + " " + target + " " + version + endLine);
     	
     	for(Header header : headers) 
     		msg.append(header.toString() + endLine);

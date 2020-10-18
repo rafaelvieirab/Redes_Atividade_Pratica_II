@@ -39,13 +39,22 @@ public class BuildHtmlResponse {
 		StringBuilder listStr = new StringBuilder();
 		
 		listStr.append(INITIAL_HTML);
-		listStr.append("<ul>");
 		
 		listStr.append("<h3> Empregado Cadastrado com Sucesso </h3>");
 		listStr.append("<p>Id: "+ emp.getId() + "</p>");
 		listStr.append("<p>Nome: "+ emp.getName() + "</p>");
 		listStr.append("<p>Cargo: "+ emp.getOffice() + "</p>");
 		
+		listStr.append(FINAL_HTML);
+		
+		return listStr.toString();
+	}
+	
+	public static String toHtml(String statusErro, String msgErro) {
+		StringBuilder listStr = new StringBuilder();
+		
+		listStr.append(INITIAL_HTML);
+		listStr.append("<h1>Erro " + statusErro + "<br>"+ msgErro +"</h1>");
 		listStr.append(FINAL_HTML);
 		
 		return listStr.toString();
